@@ -20,7 +20,7 @@ func SetPalette(index uint8, color uint16) {
 }
 
 // SetPixel sets a palette color on a point in a x/y coordinate, either in the front or the back page.
-func SetPixel(x, y uint8, index uint8, frontPage bool) {
+func SetPixel(x, y, index uint8, frontPage bool) {
 	var mem *[160][120]volatile.Register16
 	if frontPage {
 		mem = _MEM_VRAM_PAGE1
@@ -29,7 +29,7 @@ func SetPixel(x, y uint8, index uint8, frontPage bool) {
 	}
 
 	// We get the current value (divided by two because registers are only writable in 2 byte chunks)
-	pos := mem[y][x/2]
+	pos := &mem[y][x/2]
 
 	// We need the value set before so we don't override it when writing a single byte using 2 bytes.
 	dst := pos.Get()

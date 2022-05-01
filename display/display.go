@@ -4,7 +4,6 @@ import (
 	"machine"
 	"runtime/interrupt"
 	"runtime/volatile"
-	"sync"
 	"unsafe"
 )
 
@@ -34,8 +33,6 @@ var (
 	_DSTAT_VBL_IRQ uint16 = 1 << 3
 	_DSTAT_HBL_IRQ uint16 = 1 << 4
 )
-
-var once = &sync.Once{}
 
 var (
 	// Display status (0400:0004h)
@@ -68,11 +65,11 @@ func SetDisplayOptions(options ...DisplayOption) {
 }
 
 func ShowPage(frontPage bool) {
-	value := _REG_DISPSTAT.Get()
+	value := _REG_DISPCNT.Get()
 	if frontPage {
 		var mask uint16 = ^(uint16(1) << 4)
 		_REG_DISPCNT.Set(value & mask)
 	} else {
-		_REG_DISPSTAT.Set(value | uint16(1)<<4)
+		_REG_DISPCNT.Set(value | uint16(1)<<4)
 	}
 }

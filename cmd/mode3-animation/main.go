@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gkawamoto/go-libgba/display"
-	"github.com/gkawamoto/go-libgba/display/mode4"
+	"github.com/gkawamoto/go-libgba/display/mode3"
 )
 
 var index uint = 0
@@ -12,26 +12,10 @@ var palette = map[uint16]uint8{}
 func main() {
 	display.EnableVBlankInterrupts()
 	display.RegisterVBlankUpdate(update)
-	display.SetDisplayOptions(display.Mode4, display.BG2)
-
-	// Loading colors from bitmap image to GBA's palette.
-	// In real life this should be pre-rendered and stored as an 8 bit array and not as a bitmap
-	var count uint8 = 0
-	for _, pix := range kirby {
-		_, ok := palette[pix]
-		if !ok {
-			palette[pix] = count
-			count++
-		}
-	}
-
-	// Properly setting the palette colors
-	for color, index := range palette {
-		mode4.SetPalette(uint8(index), color)
-	}
+	display.SetDisplayOptions(display.Mode3, display.BG2)
 
 	// First draw so we can have a first drawing
-	drawImageMode4(palette, kirby, 21, 19, 210, 21*index, 0, index%2 == 0)
+	drawImageMode3(palette, kirby, 21, 19, 210, 21*index, 0, index%2 == 0)
 
 	select {}
 }
@@ -46,22 +30,21 @@ func update() {
 
 		// We'll use page flipping to make the animation smoother. Think of it as some sort of frame buffer
 		// index%2 == 0 tells us if we're using the front or the back page
-		drawImageMode4(palette, kirby, 21, 19, 210, 21*index, 0, index%2 == 0)
+		drawImageMode3(palette, kirby, 21, 19, 210, 21*index, 0, index%2 == 0)
 
 		// Flipping to the right page
 		display.ShowPage(index%2 == 0)
 	}
 }
 
-func drawImageMode4(palette map[uint16]uint8, image []uint16, width, height, imageWidth, offsetX, offsetY uint, frontPage bool) {
+func drawImageMode3(palette map[uint16]uint8, image []uint16, width, height, imageWidth, offsetX, offsetY uint, frontPage bool) {
 	// Fetches the values inside the viewport and plots them on screen.
 	// There's a bunch of improvements we can do here, but that's out of scope for this test
 	var x, y uint
 	for x = 0; x < width; x++ {
 		for y = 0; y < height; y++ {
 			value := image[(x+imageWidth*y)+(offsetX+offsetY)]
-			index := palette[value]
-			mode4.SetPixel(uint8(x), uint8(y), index, frontPage)
+			mode3.SetPixel(uint8(x), uint8(y), value)
 		}
 	}
 }

@@ -41,8 +41,8 @@ func drawImageMode3(palette map[uint16]uint8, image []uint16, width, height, ima
 	// Fetches the values inside the viewport and plots them on screen.
 	// There's a bunch of improvements we can do here, but that's out of scope for this test
 	var x, y uint
-	for x = 0; x < width; x++ {
-		for y = 0; y < height; y++ {
+	for y = 0; y < height; y++ {
+		for x = 0; x < width; x++ {
 			value := image[(x+imageWidth*y)+(offsetX+offsetY)]
 			mode3.SetPixel(uint8(x), uint8(y), value)
 		}

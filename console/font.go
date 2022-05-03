@@ -1,5 +1,6 @@
 package console
 
+// Rune mapping to indexes in the font
 var runes = map[rune]uint16{
 	'a':  0,
 	'b':  1,
@@ -70,6 +71,7 @@ const charCount uint16 = 64
 const fontWidth uint16 = 5
 const fontHeight uint16 = 7
 
+// Simple pixel font with all characters in `runes`. All characters are 5x7, displayed as a big 320x7 bitmap
 var font = []bool{
 	false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false,

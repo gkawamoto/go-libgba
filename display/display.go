@@ -41,21 +41,25 @@ var (
 	_REG_DISPCNT = (*volatile.Register16)(unsafe.Pointer(uintptr(0x04000000)))
 )
 
+// EnableVBlankInterrupts enables VBlank interrupts, enabling us to react to VBlank using `RegisterVBlankUpdate`
 func EnableVBlankInterrupts() {
 	_REG_DISPSTAT.SetBits(_DSTAT_VBL_IRQ)
 	interrupt.New(machine.IRQ_VBLANK, vBlankUpdate).Enable()
 }
 
+// vBlankUpdate handles all VBlank updates and calls all functions registered to be called
 func vBlankUpdate(interrupt.Interrupt) {
 	for _, ref := range vBlankUpdateRefs {
 		ref()
 	}
 }
 
+// RegisterVBlankUpdate pushes a function to be called upon VBlanks
 func RegisterVBlankUpdate(ref func()) {
 	vBlankUpdateRefs = append(vBlankUpdateRefs, ref)
 }
 
+// SetDisplayOptions bitwise OR all options and sends it to the display control register.
 func SetDisplayOptions(options ...DisplayOption) {
 	var value DisplayOption = 0
 	for _, option := range options {
@@ -64,6 +68,7 @@ func SetDisplayOptions(options ...DisplayOption) {
 	_REG_DISPCNT.Set(uint16(value))
 }
 
+// ShowPage sets the page bit to `frontPage` value
 func ShowPage(frontPage bool) {
 	value := _REG_DISPCNT.Get()
 	if frontPage {

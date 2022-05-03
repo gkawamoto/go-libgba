@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gkawamoto/go-libgba/color"
+	"github.com/gkawamoto/go-libgba/console"
 	"github.com/gkawamoto/go-libgba/display"
 	"github.com/gkawamoto/go-libgba/display/mode3"
 	"github.com/gkawamoto/go-libgba/display/mode4"
@@ -9,8 +10,8 @@ import (
 )
 
 var (
-	x uint8 = 10
-	y uint8 = 10
+	x uint16 = 30
+	y uint16 = 7
 )
 var redPaletteIndex uint8 = 1
 
@@ -34,10 +35,16 @@ func main() {
 func initMode4() {
 	display.SetDisplayOptions(display.Mode4, display.BG2)
 	mode4.SetPalette(redPaletteIndex, color.PackRGB(255, 0, 0))
+	console.SetMode(console.Mode4)
+	console.Reset()
+	console.Println("Mode 4. Press L to go to Mode 3")
 }
 
 func initMode3() {
 	display.SetDisplayOptions(display.Mode3, display.BG2)
+	console.SetMode(console.Mode3)
+	console.Reset()
+	console.Println("Mode 3. Press R to go to Mode 4")
 }
 
 func update() {

@@ -61,7 +61,7 @@ func drawImageMode4(palette map[uint16]uint8, image []uint16, width, height, ima
 		for x = 0; x < width; x++ {
 			value := image[(x+imageWidth*y)+(offsetX+offsetY)]
 			index := palette[value]
-			mode4.SetPixel(uint8(x), uint8(y), index, frontPage)
+			mode4.SetPixel(uint16(x), uint16(y), index, frontPage)
 		}
 	}
 }

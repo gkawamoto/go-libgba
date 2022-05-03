@@ -44,7 +44,7 @@ func drawImageMode3(palette map[uint16]uint8, image []uint16, width, height, ima
 	for y = 0; y < height; y++ {
 		for x = 0; x < width; x++ {
 			value := image[(x+imageWidth*y)+(offsetX+offsetY)]
-			mode3.SetPixel(uint8(x), uint8(y), value)
+			mode3.SetPixel(uint16(x), uint16(y), value)
 		}
 	}
 }

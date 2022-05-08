@@ -72,9 +72,9 @@ func SetDisplayOptions(options ...DisplayOption) {
 func ShowPage(frontPage bool) {
 	value := _REG_DISPCNT.Get()
 	if frontPage {
-		var mask uint16 = ^(uint16(1) << 4)
+		var mask uint16 = ^uint16(BackPage)
 		_REG_DISPCNT.Set(value & mask)
 	} else {
-		_REG_DISPCNT.Set(value | uint16(1)<<4)
+		_REG_DISPCNT.Set(value | uint16(BackPage))
 	}
 }

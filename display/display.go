@@ -78,3 +78,9 @@ func ShowPage(frontPage bool) {
 		_REG_DISPCNT.Set(value | uint16(BackPage))
 	}
 }
+
+// VCount returns the number of rendered lines in the screen at the moment of its call
+func VCount() uint8 {
+	// 0400:0006h
+	return (*volatile.Register8)(unsafe.Pointer(uintptr(0x04000006))).Get()
+}
